@@ -91,7 +91,9 @@ Application::Application(GLWindow* mainWindow):
 
 Application::~Application()
 {
-  --_count ? delete _mainWindow : internal::terminateGlfw();
+  delete _mainWindow;
+  if (--_count <= 0)
+    internal::terminateGlfw();
 }
 
 #ifdef _WIN32

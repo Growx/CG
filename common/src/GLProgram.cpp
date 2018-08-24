@@ -30,7 +30,7 @@
 // Author: Paulo Pagliosa
 // Last revision: 10/08/2018
 
-#include "GLProgram.h"
+#include "graphics/GLProgram.h"
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>

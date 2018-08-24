@@ -59,8 +59,14 @@
     <ClInclude Include="..\..\include\graphics\GLWindow.h">
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\GLProgram.h">
+    <ClInclude Include="..\..\include\graphics\GLMeshArray.h">
       <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\graphics\GLProgram.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\SharedObject.h">
+      <Filter>Header Files\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

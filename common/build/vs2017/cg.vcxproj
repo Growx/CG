@@ -89,9 +89,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\core\Globals.h" />
-    <ClInclude Include="..\..\include\GLProgram.h" />
+    <ClInclude Include="..\..\include\core\SharedObject.h" />
     <ClInclude Include="..\..\include\graphics\Application.h" />
     <ClInclude Include="..\..\include\graphics\Color.h" />
+    <ClInclude Include="..\..\include\graphics\GLMeshArray.h" />
+    <ClInclude Include="..\..\include\graphics\GLProgram.h" />
     <ClInclude Include="..\..\include\graphics\GLWindow.h" />
     <ClInclude Include="..\..\include\math\Matrix3x3.h" />
     <ClInclude Include="..\..\include\math\Matrix4x4.h" />

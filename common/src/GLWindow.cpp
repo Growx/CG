@@ -82,7 +82,7 @@ GLWindow::mouseButtonInputEvent(int button, int actions, int mods)
 }
 
 bool
-GLWindow::mouseScrollEvent(double xOffset, double yOffset)
+GLWindow::scrollEvent(double xOffset, double yOffset)
 {
   (void)xOffset;
   (void)yOffset;
@@ -94,25 +94,23 @@ GLWindow::windowResizeEvent(int width, int height)
 {
   _width = width;
   _height = height;
-  return false;
+  return true;
 }
 
 bool
 GLWindow::keyInputEvent(int key, int action, int mods)
 {
-  auto handled = false;
-
   if (action == GLFW_PRESS)
   {
-    if (key == GLFW_KEY_ESCAPE)
+    if (mods == GLFW_MOD_ALT && key == GLFW_KEY_F4)
     {
       glfwSetWindowShouldClose(_window, GL_TRUE);
-      handled = true;
+      return true;
     }
-    else if (key == GLFW_KEY_P)
-      _paused ^= handled = true;
+    if (mods == GLFW_MOD_CONTROL && key == GLFW_KEY_P && !_paused)
+      return _paused = true;
   }
-  return handled;
+  return false;
 }
 
 void
@@ -159,10 +157,11 @@ GLWindow::registerGlfwCallBacks()
 {
   glfwSetKeyCallback(_window, keyInputCallBack);
   glfwSetWindowSizeCallback(_window, windowResizeCallBack);
-  glfwSetScrollCallback(_window, mouseScrollCallBack);
+  glfwSetScrollCallback(_window, scrollCallBack);
   glfwSetMouseButtonCallback(_window, mouseButtonCallBack);
   glfwSetCursorPosCallback(_window, mouseMoveCallBack);
   glfwSetCursorEnterCallback(_window, cursorEnterWindowCallBack);
+  glfwSetCharCallback(_window, ImGui_ImplGlfw_CharCallback);
 }
 
 void
@@ -194,15 +193,21 @@ GLWindow::mainLoop()
       update();
     else
     {
-      static auto showPause = true;
-      const ImVec2 c{_displayWidth * 0.5f, _displayHeight * 0.25f};
-
-      ImGui::SetNextWindowPosCenter();
-      ImGui::SetNextWindowSize(c);
-      ImGui::Begin("", &showPause, c, 0.9f, ImGuiWindowFlags_NoTitleBar);
-      ImGui::Text("Paused");
-      ImGui::Text("Press P to continue...");
-      ImGui::End();
+      ImGui::OpenPopup("Paused");
+      if (ImGui::BeginPopupModal("Paused", nullptr, ImGuiWindowFlags_NoTitleBar))
+      {
+        ImGui::Text("Application '%s' is paused.", _title.c_str());
+        ImGui::Separator();
+        if (ImGui::Button("Continue"))
+        {
+          _paused = false;
+          ImGui::CloseCurrentPopup();
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Exit"))
+          glfwSetWindowShouldClose(_window, GL_TRUE);
+        ImGui::EndPopup();
+      }
     }
     // Update the GUI.
     gui();
@@ -233,13 +238,7 @@ GLWindow::show()
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  glfwWindowHint(GLFW_VISIBLE, GL_TRUE);
-  glfwWindowHint(GLFW_SAMPLES, 0);
-  glfwWindowHint(GLFW_RED_BITS, 8);
-  glfwWindowHint(GLFW_GREEN_BITS, 8);
-  glfwWindowHint(GLFW_BLUE_BITS, 8);
-  glfwWindowHint(GLFW_ALPHA_BITS, 8);
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
   _window = createGlfwWindow(_title.c_str(), _width, _height);
   if (_window == nullptr)
     Application::error("Unable to create GLFW window");
@@ -248,6 +247,8 @@ GLWindow::show()
   centerWindow();
   glfwMakeContextCurrent(_window);
   gl3wInit();
+  if (!gl3wIsSupported(3, 3))
+    Application::error("OpenGL v330 is not supported");
   glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
   registerGlfwCallBacks();
   // Setup Dear ImGui binding.
@@ -260,6 +261,7 @@ GLWindow::show()
   auto& style = ImGui::GetStyle();
 
   style.FrameRounding = style.WindowRounding = 0.0f;
+  style.FrameBorderSize = 1.0f;
   style.Alpha = 0.9f;
   ImGui::StyleColorsDark();
   // Clear error buffer.
@@ -283,10 +285,7 @@ getWindow(GLFWwindow* window)
 void
 GLWindow::windowResizeCallBack(GLFWwindow* window, int width, int height)
 {
-  auto glWindow = getWindow(window);
-  
-  glWindow->GLWindow::windowResizeEvent(width, height);
-  glWindow->windowResizeEvent(width, height);
+  getWindow(window)->windowResizeEvent(width, height);
 }
 
 void
@@ -296,18 +295,15 @@ GLWindow::keyInputCallBack(GLFWwindow* window,
   int action,
   int mods)
 {
-  auto glWindow = getWindow(window);
-
-  if (!glWindow->keyInputEvent(key, action, mods))
-    glWindow->GLWindow::keyInputEvent(key, action, mods);
+  if (!getWindow(window)->keyInputEvent(key, action, mods))
+    ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
 }
 
 void
-GLWindow::mouseScrollCallBack(GLFWwindow* window,
-  double xOffSet,
-  double yOffSet)
+GLWindow::scrollCallBack(GLFWwindow* window, double xOffSet, double yOffSet)
 {
-  getWindow(window)->mouseScrollEvent(xOffSet, yOffSet);
+  if (!getWindow(window)->scrollEvent(xOffSet, yOffSet))
+    ImGui_ImplGlfw_ScrollCallback(window, xOffSet, yOffSet);
 }
 
 void

@@ -33,8 +33,8 @@
 #ifndef __GLWindow_h
 #define __GLWindow_h
 
-#include "Color.h"
-#include "GLProgram.h"
+#include "graphics/Color.h"
+#include "graphics/GLProgram.h"
 #include "imgui.h"
 
 namespace cg
@@ -67,7 +67,7 @@ protected:
   virtual bool cursorEnterWindowEvent(int entered);
   virtual bool mouseMoveEvent(double xPos, double yPos);
   virtual bool mouseButtonInputEvent(int button, int actions, int mods);
-  virtual bool mouseScrollEvent(double xOffset, double yOffset);
+  virtual bool scrollEvent(double xOffset, double yOffset);
   virtual bool windowResizeEvent(int width, int height);
   virtual bool keyInputEvent(int key, int action, int mods);
 
@@ -114,7 +114,7 @@ private:
   static void cursorEnterWindowCallBack(GLFWwindow*, int);
   static void mouseMoveCallBack(GLFWwindow*, double, double);
   static void mouseButtonCallBack(GLFWwindow*, int, int, int);
-  static void mouseScrollCallBack(GLFWwindow*, double, double);
+  static void scrollCallBack(GLFWwindow*, double, double);
   static void windowResizeCallBack(GLFWwindow*, int, int);
   static void keyInputCallBack(GLFWwindow*, int, int, int, int);
 
