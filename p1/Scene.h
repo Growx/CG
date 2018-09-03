@@ -35,7 +35,7 @@
 
 #include "SceneObject.h"
 #include "graphics/Color.h"
-
+#include <list>
 namespace cg
 { // begin namespace cg
 
@@ -55,7 +55,9 @@ public:
   {
     // do nothing
   }
-
+void showHierarchy(void);
+private:
+	std::list<SceneObject> sceneObjectList;
 }; // Scene
 
 } // end namespace cg

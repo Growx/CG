@@ -81,11 +81,13 @@ public:
   {
     return &_transform;
   }
+  void showFamily(void);
 
 private:
   Scene* _scene;
   SceneObject* _parent;
   Transform _transform;
+  std::list<SceneObject> children;
 
   friend class Scene;
 

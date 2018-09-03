@@ -45,5 +45,8 @@ SceneObject::setParent(SceneObject* parent)
 {
   // TODO
 }
-
+void SceneObject::showFamily(void)
+{
+	//TODO
+}
 } // end namespace cg
