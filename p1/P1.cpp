@@ -65,7 +65,7 @@ inline void
 P1::buildScene()
 {
   _current = _scene = new cg::Scene{"Scene 1"};
-  _box = new cg::SceneObject{"Box 1"};
+  _box = new cg::SceneObject{"Box 1", _scene};
   _primitive = cg::makeBoxMesh();
 }
 
@@ -153,12 +153,26 @@ ColorEdit3(const char* label, cg::Color& color)
   return ImGui::ColorEdit3(label, (float*)&color);
 }
 
+inline bool
+DragVec3(const char* label, vec3f& v)
+{
+  return DragFloat3(label, (float*)&v, 0.1f, 0.0f, 0.0f, "%.2g");
+}
+
 void
 TransformEdit(cg::Transform* transform)
 {
-  ImGui::DragFloat3("Position", (float*)&transform->position);
-  ImGui::DragFloat3("Rotation", (float*)&transform->rotation);
-  ImGui::DragFloat3("Scale", (float*)&transform->scale);
+  vec3f temp;
+
+  temp = transform->localPosition();
+  if (ImGui::DragVec3("Position", temp))
+    transform->setLocalPosition(temp);
+  temp = transform->localEulerAngles();
+  if (ImGui::DragVec3("Rotation", temp))
+    transform->setLocalEulerAngles(temp);
+  temp = transform->localScale();
+  if (ImGui::DragVec3("Scale", temp))
+    transform->setLocalScale(temp);
 }
 
 } // end namespace ImGui
@@ -191,7 +205,7 @@ P1::sceneObjectGui()
     auto t = object->transform();
 
     ImGui::TransformEdit(t);
-    _transform.setTRS(t->position, t->rotation, t->scale);
+    _transform = t->localToWorldMatrix();
   }
   if (ImGui::CollapsingHeader(_primitive->typeName()))
   {
