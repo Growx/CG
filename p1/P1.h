@@ -5,15 +5,13 @@
 #include "Scene.h"
 #include "graphics/Application.h"
 
-class P1: public cg::GLWindow
+using namespace cg;
+
+class P1: public GLWindow
 {
 public:
-  using Base = cg::GLWindow;
-  using Program = cg::GLSL::Program;
-  using Color = cg::Color;
-
   P1(int width, int height):
-    Base{"cg2018 - P1", width, height},
+    GLWindow{"cg2018 - P1", width, height},
     _program{"P1"}
   {
     // do nothing
@@ -29,11 +27,11 @@ public:
   void render() override;
 
 private:
-  Program _program;
-  Reference<cg::Scene> _scene;
-  Reference<cg::SceneObject> _box;
-  Reference<cg::Primitive> _primitive;
-  cg::SceneNode* _current{};
+  GLSL::Program _program;
+  Reference<Scene> _scene;
+  Reference<SceneObject> _box;
+  Reference<Primitive> _primitive;
+  SceneNode* _current{};
   Color selectedWireframeColor{255, 102, 0};
   mat4f _transform{mat4f::identity()};
 

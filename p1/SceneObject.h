@@ -35,7 +35,6 @@
 
 #include "SceneNode.h"
 #include "Transform.h"
-#include <list>
 
 namespace cg
 { // begin namespace cg
@@ -82,13 +81,11 @@ public:
   {
     return &_transform;
   }
-  void showFamily(void);
 
 private:
   Scene* _scene;
   SceneObject* _parent;
   Transform _transform;
-  std::list<SceneObject> children;
 
   friend class Scene;
 

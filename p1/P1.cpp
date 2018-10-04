@@ -64,15 +64,15 @@ makeBoxMesh()
 inline void
 P1::buildScene()
 {
-  _current = _scene = new cg::Scene{"Scene 1"};
-  _box = new cg::SceneObject{"Box 1", _scene};
-  _primitive = cg::makeBoxMesh();
+  _current = _scene = new Scene{"Scene 1"};
+  _box = new SceneObject{"Box 1", _scene};
+  _primitive = makeBoxMesh();
 }
 
 void
 P1::initialize()
 {
-  cg::Application::loadShaders(_program, "p1.vs", "p1.fs");
+  Application::loadShaders(_program, "p1.vs", "p1.fs");
   buildScene();
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_POLYGON_OFFSET_FILL);
@@ -132,10 +132,10 @@ namespace ImGui
 { // begin namespace ImGui
 
 void
-ObjectNameInput(cg::SceneNode* object)
+ObjectNameInput(SceneNode* object)
 {
   const int bufferSize{128};
-  static cg::SceneNode* current;
+  static SceneNode* current;
   static char buffer[bufferSize];
 
   if (object != current)
@@ -148,7 +148,7 @@ ObjectNameInput(cg::SceneNode* object)
 }
 
 inline bool
-ColorEdit3(const char* label, cg::Color& color)
+ColorEdit3(const char* label, Color& color)
 {
   return ImGui::ColorEdit3(label, (float*)&color);
 }
@@ -160,7 +160,7 @@ DragVec3(const char* label, vec3f& v)
 }
 
 void
-TransformEdit(cg::Transform* transform)
+TransformEdit(Transform* transform)
 {
   vec3f temp;
 
@@ -180,7 +180,7 @@ TransformEdit(cg::Transform* transform)
 inline void
 P1::sceneGui()
 {
-  auto scene = (cg::Scene*)_current;
+  auto scene = (Scene*)_current;
 
   ImGui::ObjectNameInput(_current);
   ImGui::Separator();
@@ -194,7 +194,7 @@ P1::sceneGui()
 inline void
 P1::sceneObjectGui()
 {
-  auto object = (cg::SceneObject*)_current;
+  auto object = (SceneObject*)_current;
 
   ImGui::ObjectNameInput(object);
   ImGui::SameLine();
@@ -218,12 +218,12 @@ P1::objectGui()
 {
   if (_current == nullptr)
     return;
-  if (dynamic_cast<cg::SceneObject*>(_current))
+  if (dynamic_cast<SceneObject*>(_current))
   {
     sceneObjectGui();
     return;
   }
-  if (dynamic_cast<cg::Scene*>(_current))
+  if (dynamic_cast<Scene*>(_current))
     sceneGui();
 }
 
@@ -249,7 +249,7 @@ P1::gui()
 void
 P1::render()
 {
-  Base::render();
+  GLWindow::render();
   if (!_box->visible)
     return;
   _program.setUniformMat4("transform", _transform);
