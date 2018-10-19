@@ -31,6 +31,7 @@
 // Last revision: 25/08/2018
 
 #include "SceneObject.h"
+#include "..\p1\SceneObject.h"
 
 namespace cg
 { // begin namespace cg
@@ -40,10 +41,10 @@ namespace cg
 //
 // SceneObject implementation
 // ===========
-void
-SceneObject::setParent(SceneObject* parent)
-{
-  // TODO
-}
+	void
+		SceneObject::setParent(SceneObject* parent)
+	{
+		// TODO
 
-} // end namespace cg
+	} // end namespace cg
+}

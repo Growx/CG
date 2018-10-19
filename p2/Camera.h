@@ -92,11 +92,17 @@ public:
   void translate(float dx, float dy, float dz);
   void translate(const vec3f& d);
 
+  void viewMatrix(const vec3f position, quatf rotation);
+  void inverseMatrix(mat4f& matrix);
+  void projectionMatrix(float viewAngle, float aspectRatio, float F, float B);
+  void updateFocalPoint(vec3f focalpoint, vec3f position, float distance);
+
   mat4f worldToCameraMatrix() const;
   mat4f cameraToWorldMatrix() const;
   mat4f projectionMatrix() const;
   vec3f worldToCamera(const vec3f& p) const;
   vec3f cameraToWorld(const vec3f& p) const;
+
 
 private:
   static uint32_t _nextId;
@@ -115,7 +121,6 @@ private:
   mat4f _matrix; // view matrix
   mat4f _inverseMatrix;
   mat4f _projectionMatrix;
-  bool viewModified;
 
   static const char* defaultName();
 

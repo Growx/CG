@@ -89,6 +89,10 @@ private:
 
   friend class Scene;
 
+  void addChild(SceneObject * newChild);
+
+  void removeChild(SceneObject * target);
+
 }; // SceneObject
 
 /// Returns the transform of a component.
