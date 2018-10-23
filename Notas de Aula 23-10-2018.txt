@@ -1,0 +1,35 @@
+Traçado de Raios
+Traça raio de pixel da câmera, passa pelo centro do pixel e intercepta a cena.
+
+Renderização: 	- OpenGL (1)
+				- Traçado de Raios (2)
+
+(1) Primitivos: Malha de Triângulos
+(2) A versão + simples do TR exige:
+	- Há intersecção do modelo com um raio? Se sim, em qual ponto?
+	- Normal no ponto de intersecção?
+	- Material
+
+class Model
+{
+	virtual TriangleMesh* mesh() const = 0;
+	virtual bool intersect (const Ray&, IntercectInfo&) const = 0;
+	virtual vec3f normal (const vec3f&) const = 0;
+	virtual Material* material () const = 0;
+};
+
+3.1 Modelos Poligonais
+
+g = {G,T,A}
+
+G: propriedades que caracterizam a posição e dimensões do objeto
+T: Propriedades que caracterizam a forma do objeto em uma representação poligonal, as propriedades topológicas são usualmente dadas por uma hierarquia de elementos topológicos e suas relações de adjacência.
+Exemplos topológicos: vértice, aresta e face. Uma face pode ser definida por um ciclo de arestas, cada aresta definida por dois vértices.
+Exemplos de relação de adjacência: 
+	-Perguntas tipicas: 
+		- Qual a ordem de vértices que definem uma face?
+		- Quais são as faces incidentes em um vértice?
+		- Quais as faces incidentes em uma aresta?
+		
+A posição de um vértice é uma propriedade geométrica (Assim como equação de uma face ou comprimento de uma aresta), a partir da qual pode-se determinar posição e dimensões do objeto.
+		

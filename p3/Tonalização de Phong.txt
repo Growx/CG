@@ -1,0 +1,2 @@
+Tonalização de Phong
+Cor de um fragmento é determinada, não por interpolação das cores vindas do procesamento de vértice, mas diretamente no processamento de fragmento. Se estivermos usando um modelo de iluminação para tonalização (como modelo local de phong), então a implementação deste modelo é efetuada no shader de fragmento. Nesse caso, ao invés da saída do vértice de shader ser uma cor, deve ser a posição global e a normal do vértice as quais serão interpoladas para o fragmento a ser iluminado pelo rasterizador da OpenGL.
